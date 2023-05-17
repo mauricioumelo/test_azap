@@ -31,7 +31,7 @@ class Invoice
         $this->dt_entrega = $this->dt_entrega ? DateTime::createFromFormat('d/m/Y H:i:s', $this->dt_entrega) : null;
     }
 
-    public function format():array
+    public function format(): array
     {
         return [
             'chave' => (string) $this->chave,
@@ -39,9 +39,9 @@ class Invoice
             'dest' => $this->dest,
             'cnpj_remete' => (string) $this->cnpj_remete,
             'nome_remete' => (string) $this->nome_remete,
-            'nome_transp' =>(string) $this->nome_transp,
+            'nome_transp' => (string) $this->nome_transp,
             'cnpj_transp' => (string) $this->cnpj_transp,
-            'status' =>  $this->status->value,
+            'status' => $this->status->value,
             'valor' => (string) number_format((float) $this->valor, 2, '.', ''),
             'volumes' => (string) $this->volumes,
             'dt_emis' => $this->dt_emis->format('d/m/Y H:i:s'),

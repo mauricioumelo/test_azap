@@ -9,8 +9,6 @@ class Sender
     /**
      * Undocumented function
      *
-     * @param string $nome
-     * @param int $cnpj
      * @param array[Invoice] $invoices
      */
     public function __construct(
@@ -28,7 +26,7 @@ class Sender
         $this->formatInvoices();
     }
 
-    protected function calcAmounts():void
+    protected function calcAmounts(): void
     {
         try {
             foreach ($this->invoices as $invoice) {
@@ -36,9 +34,11 @@ class Sender
                 if ($invoice->status === Status::COMPROVADO && ! empty($invoice->dt_entrega)) {
                     if ($invoice->dt_estimada < $invoice->dt_entrega) {
                         (float) $this->amount_not_received += $invoice->valor;
+
                         continue;
                     }
                     $this->amount_receive += $invoice->valor;
+
                     continue;
                 }
 
@@ -54,7 +54,7 @@ class Sender
         }
     }
 
-    protected function formatInvoices():void
+    protected function formatInvoices(): void
     {
         try {
             $formatted_invoice = [];

@@ -18,7 +18,7 @@ class SenderService
         $this->azapfy_url = env('AZAPFY_URL', 'http://homologacao3.azapfy.com.br/api/ps/notas');
     }
 
-    protected function getInvoicesGroupBySender():array
+    protected function getInvoicesGroupBySender(): array
     {
         $response = Http::get($this->azapfy_url);
 
@@ -39,11 +39,10 @@ class SenderService
     /**
      * Function transform invoices to senders
      *
-     * @param array $invoices
-     *
+     * @param  array  $invoices
      * @return Collection[Senders]
      */
-    private function toSenders(array $invoicesBySender):Collection
+    private function toSenders(array $invoicesBySender): Collection
     {
         try {
             $sendersEntity = [];
@@ -59,14 +58,14 @@ class SenderService
                         nome_remete: $invoice['nome_remete'],
                         nome_transp: $invoice['nome_transp'],
                         cnpj_transp: $invoice['cnpj_transp'],
-                        status:  constant(Status::class.'::'.$invoice['status']),
+                        status: constant(Status::class.'::'.$invoice['status']),
                         valor: $invoice['valor'],
                         volumes: $invoice['volumes'],
                         dt_emis: $invoice['dt_emis'],
                         dt_entrega: isset($invoice['dt_entrega']) ? $invoice['dt_entrega'] : null,
                     );
                 }
-                $sendersEntity[] = new Sender(nome: $invoices[0]['nome_remete'], cnpj:(int) $invoices[0]['cnpj_remete'], invoices:$invoicesEntity);
+                $sendersEntity[] = new Sender(nome: $invoices[0]['nome_remete'], cnpj: (int) $invoices[0]['cnpj_remete'], invoices: $invoicesEntity);
             }
 
             return collect($sendersEntity);

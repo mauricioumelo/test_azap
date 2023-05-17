@@ -12,17 +12,17 @@ use Illuminate\Http\Request;
 class SendersController extends Controller
 {
     public function __construct(
-      private SenderService $senderService
+        private SenderService $senderService
     ) {
     }
 
-    public function index(Request $request):JsonResponse
+    public function index(Request $request): JsonResponse
     {
         try {
             $data = $this->senderService->getAllSenders(listSendersInputDto: new ListSendersInputDto(
-                order:$request->order ?: '',
-                page:$request->page ?: 1,
-                limit:$request->limit ?: 10
+                order: $request->order ?: '',
+                page: $request->page ?: 1,
+                limit: $request->limit ?: 10
             ));
 
             return ResponseApi::success($data->toArray(), 'success in listing invoices by group');
