@@ -41,4 +41,4 @@ $ chown www:www -R storage/
 ```
 
 ### Collection Postman
-- [Rotas]()
+- [Rotas](https://api.postman.com/collections/9200289-f7926f84-51eb-4ef7-ba8c-a03704688b2b?access_key=PMAT-01H0NHZJ69PRCZ8NWZEWE9KDMX)

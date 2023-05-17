@@ -4,7 +4,11 @@ namespace App\Domain\Entity\Senders;
 
 use App\Domain\Entity\Invoices\Invoice;
 use App\Domain\Enum\Invoice\Status;
+use App\UseCase\DTO\Senders\ListSendersInputDto;
 use Exception;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
 class SenderService
@@ -25,11 +29,11 @@ class SenderService
         return collect($response->json())->groupBy(['nome_remete'])->toArray();
     }
 
-    public function getAllSenders(): array
+    public function getAllSenders(ListSendersInputDto $listSendersInputDto): LengthAwarePaginator
     {
         $senders = $this->toSenders($this->getInvoicesGroupBySender());
 
-        return $senders;
+        return $this->paginate($senders, $listSendersInputDto->limit, $listSendersInputDto->page);
     }
 
     /**
@@ -37,9 +41,9 @@ class SenderService
      *
      * @param array $invoices
      *
-     * @return array[Senders]
+     * @return Collection[Senders]
      */
-    private function toSenders(array $invoicesBySender):array
+    private function toSenders(array $invoicesBySender):Collection
     {
         try {
             $sendersEntity = [];
@@ -65,9 +69,17 @@ class SenderService
                 $sendersEntity[] = new Sender(nome: $invoices[0]['nome_remete'], cnpj:(int) $invoices[0]['cnpj_remete'], invoices:$invoicesEntity);
             }
 
-            return $sendersEntity;
+            return collect($sendersEntity);
         } catch (\Throwable $th) {
             throw $th;
         }
+    }
+
+    protected function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }
